@@ -1,15 +1,22 @@
 import { AntDesign } from "@expo/vector-icons";
 import {
-    createDrawerNavigator,
-    DrawerContentScrollView
+  createDrawerNavigator,
+  DrawerContentScrollView,
 } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import {
-    Box, Divider, HStack, Icon, Pressable, Text, VStack
+  Box,
+  Divider,
+  HStack,
+  Icon,
+  Pressable,
+  Text,
+  VStack,
 } from "native-base";
-import * as React from "react";
+import React, { useContext } from "react";
 import Login from "../pages/Login";
-import TesteStack from '../pages/TesteStack';
+import TesteStack from "../pages/TesteStack";
+import { UsuarioContext } from "../context";
 
 const Drawer = createDrawerNavigator();
 
@@ -31,11 +38,11 @@ function CustomDrawerContent(props) {
     <DrawerContentScrollView {...props} safeArea>
       <VStack space="6" my="2" mx="1">
         <Box px="4">
-          <Text bold color="gray.700">
-            {/* TODO: Nome du usuário logado */}
+          <Text bold color="#A2A1A6">
+            {props.usuario?.nome}
           </Text>
-          <Text fontSize="14" mt="1" color="gray.500" fontWeight="500">
-            {/* TODO: Email do usuário logado */}
+          <Text fontSize="14" mt="1" color="#A2A1A6" fontWeight="500">
+            {props.usuario?.email}
           </Text>
         </Box>
         <VStack divider={<Divider />} space="4">
@@ -57,17 +64,13 @@ function CustomDrawerContent(props) {
               >
                 <HStack space="7" alignItems="center">
                   <Icon
-                    color={
-                      index === props.state.index ? "primary.500" : "gray.500"
-                    }
+                    color={index === props.state.index ? "#504AFF" : "#A2A1A6"}
                     size="5"
                     as={<AntDesign name={getIcon(name)} />}
                   />
                   <Text
                     fontWeight="500"
-                    color={
-                      index === props.state.index ? "primary.500" : "gray.700"
-                    }
+                    color={index === props.state.index ? "#504AFF" : "#A2A1A6"}
                   >
                     {name}
                   </Text>
@@ -80,24 +83,26 @@ function CustomDrawerContent(props) {
     </DrawerContentScrollView>
   );
 }
-function MyDrawer() {
+function MyDrawer({ usuario }) {
   return (
     <Box safeArea flex={1}>
       <Drawer.Navigator
-        drawerContent={(props) => <CustomDrawerContent {...props} />}
+        drawerContent={(props) => (
+          <CustomDrawerContent usuario={usuario} {...props} />
+        )}
       >
         <Drawer.Screen name="Login" component={Login} />
         <Drawer.Screen name="Alunos" component={Login} />
         <Drawer.Screen name="Materias" component={Login} />
-        <Drawer.Screen name="Teste Stack" component={TesteStack} />
       </Drawer.Navigator>
     </Box>
   );
 }
 export default function Menu() {
+  const { usuario } = useContext(UsuarioContext);
   return (
     <NavigationContainer>
-      <MyDrawer />
+      <MyDrawer usuario={usuario} />
     </NavigationContainer>
   );
 }
