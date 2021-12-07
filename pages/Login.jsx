@@ -16,10 +16,12 @@ import { Container } from "../components/Container";
 import Title from "../components/Title";
 import { UsuarioContext } from "../context";
 
-const Login = () => {
+const Login = ({ navigation }) => {
   const [email, setEmail] = useState();
   const [senha, setSenha] = useState();
   const [mostrarMensagemErro, setMostrarMensagemErro] = useState(false);
+  const [mostrarMensagemSucesso, setMostrarMensagemSucesso] = useState(false);
+
   const { setUsuario } = useContext(UsuarioContext);
 
   const efetuarLogin = () => {
@@ -30,6 +32,7 @@ const Login = () => {
       })
       .then((result) => {
         setUsuario(result.data);
+        setMostrarMensagemSucesso(true);
       })
       .catch((erro) => {
         setMostrarMensagemErro(true);
@@ -39,25 +42,48 @@ const Login = () => {
   return (
     <Container>
       <Title>Serratec app</Title>
-        <Collapse isOpen={mostrarMensagemErro}>
-          <Alert w="100%" status={"error"} mt="5">
-            <VStack space={2} flexShrink={1} w="100%">
-              <HStack flexShrink={1} space={2} justifyContent="space-between">
-                <HStack space={2} flexShrink={1}>
-                  <Alert.Icon mt="1" />
-                  <Text fontSize="md" color="coolGray.800">
-                    {"Usuário ou senha incorretos"}
-                  </Text>
-                </HStack>
-                <IconButton
-                  variant="unstyled"
-                  icon={<CloseIcon size="3" color="coolGray.600" />}
-                  onPress={() => { setMostrarMensagemErro(false) }}
-                />
+      <Collapse isOpen={mostrarMensagemErro}>
+        <Alert w="100%" status={"error"} mt="5">
+          <VStack space={2} flexShrink={1} w="100%">
+            <HStack flexShrink={1} space={2} justifyContent="space-between">
+              <HStack space={2} flexShrink={1}>
+                <Alert.Icon mt="1" />
+                <Text fontSize="md" color="coolGray.800">
+                  {"Usuário ou senha incorretos"}
+                </Text>
               </HStack>
-            </VStack>
-          </Alert>
-        </Collapse>
+              <IconButton
+                variant="unstyled"
+                icon={<CloseIcon size="3" color="coolGray.600" />}
+                onPress={() => {
+                  setMostrarMensagemErro(false);
+                }}
+              />
+            </HStack>
+          </VStack>
+        </Alert>
+      </Collapse>
+      <Collapse isOpen={mostrarMensagemSucesso}>
+        <Alert w="100%" status={"success"} mt="5">
+          <VStack space={2} flexShrink={1} w="100%">
+            <HStack flexShrink={1} space={2} justifyContent="space-between">
+              <HStack space={2} flexShrink={1}>
+                <Alert.Icon mt="1" />
+                <Text fontSize="md" color="coolGray.800">
+                  {"Usuário logado com sucesso!"}
+                </Text>
+              </HStack>
+              <IconButton
+                variant="unstyled"
+                icon={<CloseIcon size="3" color="coolGray.600" />}
+                onPress={() => {
+                  setMostrarMensagemSucesso(false);
+                }}
+              />
+            </HStack>
+          </VStack>
+        </Alert>
+      </Collapse>
       <Input
         mx="3"
         placeholder="Seu e-mail"
@@ -82,6 +108,18 @@ const Login = () => {
         value={senha}
         type="password"
       />
+      <Text
+        style={{
+          color: "blue",
+          marginTop: 5,
+          margin: 20,
+          textDecorationLine: "underline",
+        }}
+        onPress={() => navigation.navigate("Cadastro")}
+        // Linking.openURL("http://google.com")}
+      >
+        Cadastrar-se
+      </Text>
       <Button size="lg" onPress={() => efetuarLogin()}>
         Login
       </Button>

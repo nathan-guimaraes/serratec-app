@@ -17,6 +17,7 @@ import React, { useContext } from "react";
 import Login from "../pages/Login";
 import TesteStack from "../pages/TesteStack";
 import { UsuarioContext } from "../context";
+import Cadastro from "../pages/Cadastro";
 
 const Drawer = createDrawerNavigator();
 
@@ -28,6 +29,8 @@ const getIcon = (screenName) => {
       return "login";
     case "Materias":
       return "book";
+    case "Cadastro":
+      return "antdesign";
     default:
       return undefined;
   }
@@ -94,6 +97,7 @@ function MyDrawer({ usuario }) {
         <Drawer.Screen name="Login" component={Login} />
         <Drawer.Screen name="Alunos" component={Login} />
         <Drawer.Screen name="Materias" component={Login} />
+        <Drawer.Screen name="Cadastro" component={Cadastro} />
       </Drawer.Navigator>
     </Box>
   );
